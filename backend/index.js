@@ -27,7 +27,7 @@ connectToDB()
 // middlewares
 const allowedOrigins = [
     process.env.ORIGIN,
-    'https://your-vercel-app.vercel.app', // Update this with your actual Vercel domain
+    'https://toolcart-gamma.vercel.app', // Your actual Vercel domain
     'http://localhost:3000'
 ];
 
