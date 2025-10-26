@@ -34,8 +34,8 @@ export const Footer = () => {
                 <Stack rowGap={'1rem'} padding={'1rem'}>
                     <Typography variant='h6'>Support</Typography>
                     <Typography sx={labelStyles}>11th Main Street, Dhaka,  DH 1515, California.</Typography>
-                    <Typography sx={labelStyles}>exclusive@gmail.com</Typography>
-                    <Typography sx={labelStyles}>+88015-88888-9999</Typography>
+                    <Typography sx={labelStyles}>bhoomash0000@gmail.com</Typography>
+                    <Typography sx={labelStyles}>+91 9159342688</Typography>
                 </Stack>
 
                 <Stack rowGap={'1rem'} padding={'1rem'}>
@@ -76,10 +76,30 @@ export const Footer = () => {
 
                     <Stack mt={.6} flexDirection={'row'} columnGap={'2rem'}>
                         <MotionConfig whileHover={{scale:1.1}} whileTap={{scale:1}}>
-                            <motion.img style={{cursor:"pointer"}} src={facebookPng} alt="Facebook" />
-                            <motion.img style={{cursor:"pointer"}} src={twitterPng} alt="Twitter" />
-                            <motion.img style={{cursor:"pointer"}} src={instagramPng} alt="Instagram" />
-                            <motion.img style={{cursor:"pointer"}} src={linkedinPng} alt="Linkedin" />
+                            <motion.img 
+                                style={{cursor:"pointer"}} 
+                                src={facebookPng} 
+                                alt="Facebook"
+                                onClick={() => window.open('https://bhoomashak.me/', '_blank')}
+                            />
+                            <motion.img 
+                                style={{cursor:"pointer"}} 
+                                src={twitterPng} 
+                                alt="Twitter"
+                                onClick={() => window.open('https://www.twitter.com', '_blank')}
+                            />
+                            <motion.img 
+                                style={{cursor:"pointer"}} 
+                                src={instagramPng} 
+                                alt="Instagram"
+                                onClick={() => window.open('https://www.instagram.com', '_blank')}
+                            />
+                            <motion.img 
+                                style={{cursor:"pointer"}} 
+                                src={linkedinPng} 
+                                alt="Linkedin"
+                                onClick={() => window.open('https://www.linkedin.com/in/bhoomash-a-k-8b7b7a293/', '_blank')}
+                            />
                         </MotionConfig>
                     </Stack>
                 </Stack>
@@ -88,7 +108,7 @@ export const Footer = () => {
 
             {/* lower */}
             <Stack alignSelf={"center"}>
-                <Typography color={'GrayText'}>&copy; Mern Store {new Date().getFullYear()}. All right reserved</Typography>
+                <Typography color={'GrayText'}>&copy; ToolCart {new Date().getFullYear()}. All right reserved</Typography>
             </Stack>
 
     </Stack>

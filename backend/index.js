@@ -13,6 +13,7 @@ const userRoutes=require("./routes/User")
 const addressRoutes=require('./routes/Address')
 const reviewRoutes=require("./routes/Review")
 const wishlistRoutes=require("./routes/Wishlist")
+const paymentRoutes=require("./routes/Payment")
 const { connectToDB } = require("./database/db")
 
 
@@ -40,6 +41,7 @@ server.use("/categories",categoryRoutes)
 server.use("/address",addressRoutes)
 server.use("/reviews",reviewRoutes)
 server.use("/wishlist",wishlistRoutes)
+server.use("/payments",paymentRoutes)
 
 
 
@@ -47,6 +49,7 @@ server.get("/",(req,res)=>{
     res.status(200).json({message:'running'})
 })
 
-server.listen(8000,()=>{
-    console.log('server [STARTED] ~ http://localhost:8000');
+const PORT = process.env.PORT || 8001;
+server.listen(PORT,()=>{
+    console.log(`server [STARTED] ~ http://localhost:${PORT}`);
 })

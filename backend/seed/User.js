@@ -11,6 +11,17 @@ const users = [
     __v: 0,
   },
   {
+  "_id": {
+    "$oid": "68fc660df83bf9d3a980b440"
+  },
+  "name": "bhoomash",
+  "email": "bhoomash0000@gmail.com",
+  "password": "$2a$10$Cf0cNM6krXOZX8pYVf5wd.w0zNEufHKzGDwcRlR4m8CuUpZPzsIly",
+  "isVerified": true,
+  "isAdmin": false,
+  "__v": 0
+},
+  {
     _id: "65c2526fdcd9253acfbaa731",
     name: "rishibakshi",
     email: "demo2@gmail.com",

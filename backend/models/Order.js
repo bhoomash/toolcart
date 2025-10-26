@@ -22,8 +22,33 @@ const orderSchema=new Schema({
     },
     paymentMode:{
         type:String,
-        enum:['COD','UPI','CARD'],
+        enum:['COD','UPI','CARD','razorpay'],
         required:true
+    },
+    paymentStatus:{
+        type:String,
+        enum:['pending','paid','failed','refunded'],
+        default:'pending'
+    },
+    paymentMethod:{
+        type:String,
+        enum:['razorpay','cod','upi','card'],
+        default:'razorpay'
+    },
+    paymentId:{
+        type:String
+    },
+    razorpayOrderId:{
+        type:String
+    },
+    razorpaySignature:{
+        type:String
+    },
+    paidAt:{
+        type:Date
+    },
+    paymentError:{
+        type:String
     },
     total:{
         type:Number,

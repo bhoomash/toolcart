@@ -24,6 +24,25 @@ exports.signup=async(req,res)=>{
         const createdUser=new User(req.body)
         await createdUser.save()
 
+        // Generate and send OTP for email verification
+        const otp = generateOTP()
+        const hashedOtp = await bcrypt.hash(otp, 10)
+
+        // Save OTP to database
+        const newOtp = new Otp({
+            user: createdUser._id,
+            otp: hashedOtp,
+            expiresAt: Date.now() + parseInt(process.env.OTP_EXPIRATION_TIME)
+        })
+        await newOtp.save()
+
+        // Send OTP email
+        await sendMail(
+            createdUser.email,
+            `Email Verification for Your ToolCart Account`,
+            `Welcome to ToolCart! Your One-Time Password (OTP) for email verification is: <b>${otp}</b>.<br/>This OTP will expire in 2 minutes. Do not share this OTP with anyone for security reasons.`
+        )
+
         // getting secure user info
         const secureInfo=sanitizeUser(createdUser)
 
@@ -38,7 +57,10 @@ exports.signup=async(req,res)=>{
             secure:process.env.PRODUCTION==='true'?true:false
         })
 
-        res.status(201).json(sanitizeUser(createdUser))
+        res.status(201).json({
+            ...sanitizeUser(createdUser),
+            message: "Account created successfully! Please check your email for the verification OTP."
+        })
 
     } catch (error) {
         console.log(error);
@@ -136,7 +158,7 @@ exports.resendOtp=async(req,res)=>{
         const newOtp=new Otp({user:req.body.user,otp:hashedOtp,expiresAt:Date.now()+parseInt(process.env.OTP_EXPIRATION_TIME)})
         await newOtp.save()
 
-        await sendMail(existingUser.email,`OTP Verification for Your MERN-AUTH-REDUX-TOOLKIT Account`,`Your One-Time Password (OTP) for account verification is: <b>${otp}</b>.</br>Do not share this OTP with anyone for security reasons`)
+        await sendMail(existingUser.email,`Email Verification for Your MERN E-Commerce Account`,`Your One-Time Password (OTP) for account verification is: <b>${otp}</b>.<br/>This OTP will expire in 2 minutes. Do not share this OTP with anyone for security reasons.`)
 
         res.status(201).json({'message':"OTP sent"})
     } catch (error) {
@@ -169,16 +191,16 @@ exports.forgotPassword=async(req,res)=>{
         await newToken.save()
 
         // sends the password reset link to the user's mail
-        await sendMail(isExistingUser.email,'Password Reset Link for Your MERN-AUTH-REDUX-TOOLKIT Account',`<p>Dear ${isExistingUser.name},
+        await sendMail(isExistingUser.email,'Password Reset Link for Your ToolCart Account',`<p>Dear ${isExistingUser.name},
 
-        We received a request to reset the password for your MERN-AUTH-REDUX-TOOLKIT account. If you initiated this request, please use the following link to reset your password:</p>
+        We received a request to reset the password for your ToolCart account. If you initiated this request, please use the following link to reset your password:</p>
         
         <p><a href=${process.env.ORIGIN}/reset-password/${isExistingUser._id}/${passwordResetToken} target="_blank">Reset Password</a></p>
         
-        <p>This link is valid for a limited time. If you did not request a password reset, please ignore this email. Your account security is important to us.
+        <p>This link is valid for 2 minutes. If you did not request a password reset, please ignore this email. Your account security is important to us.
         
-        Thank you,
-        The MERN-AUTH-REDUX-TOOLKIT Team</p>`)
+        Thank you,<br/>
+        The MERN E-Commerce Team</p>`)
 
         res.status(200).json({message:`Password Reset link sent to ${isExistingUser.email}`})
 

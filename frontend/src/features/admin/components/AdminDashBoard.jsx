@@ -11,11 +11,12 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import { selectCategories } from '../../categories/CategoriesSlice'
 import { ProductCard } from '../../products/components/ProductCard'
-import { deleteProductByIdAsync, fetchProductsAsync, selectProductIsFilterOpen, selectProductTotalResults, selectProducts, toggleFilters, undeleteProductByIdAsync } from '../../products/ProductSlice';
+import { deleteProductByIdAsync, fetchProductsAsync, selectProductIsFilterOpen, selectProductStatus, selectProductTotalResults, selectProducts, toggleFilters, undeleteProductByIdAsync } from '../../products/ProductSlice';
 import { Link } from 'react-router-dom';
 import {motion} from 'framer-motion'
 import ClearIcon from '@mui/icons-material/Clear';
 import { ITEMS_PER_PAGE } from '../../../constants';
+import { toast } from 'react-toastify';
 
 const sortOptions=[
     {name:"Price: low to high",sort:"price",order:"asc"},
@@ -35,6 +36,7 @@ export const AdminDashBoard = () => {
     const is500=useMediaQuery(theme.breakpoints.down(500))
     const isProductFilterOpen=useSelector(selectProductIsFilterOpen)
     const totalResults=useSelector(selectProductTotalResults)
+    const productStatus=useSelector(selectProductStatus)
     
     const is1200=useMediaQuery(theme.breakpoints.down(1200))
     const is800=useMediaQuery(theme.breakpoints.down(800))
@@ -55,6 +57,20 @@ export const AdminDashBoard = () => {
         dispatch(fetchProductsAsync(finalFilters))
         
     },[filters,sort,page])
+
+    // Handle delete operation status
+    useEffect(()=>{
+        if(productStatus === 'fulfilled') {
+            toast.success("Product operation completed successfully!");
+            // Refresh the product list to reflect changes
+            const finalFilters={...filters}
+            finalFilters['pagination']={page:page,limit:ITEMS_PER_PAGE}
+            finalFilters['sort']=sort
+            dispatch(fetchProductsAsync(finalFilters))
+        } else if(productStatus === 'rejected') {
+            toast.error("Failed to perform product operation. Please try again.");
+        }
+    }, [productStatus])
 
     const handleBrandFilters=(e)=>{
 
@@ -77,12 +93,18 @@ export const AdminDashBoard = () => {
         setFilters({...filters,category:filterArray})
     }
 
-    const handleProductDelete=(productId)=>{
-        dispatch(deleteProductByIdAsync(productId))
+    const handleProductDelete=(productId, productTitle)=>{
+        if(window.confirm(`Are you sure you want to delete "${productTitle}"? This action can be undone later.`)) {
+            dispatch(deleteProductByIdAsync(productId))
+            toast.info("Deleting product...");
+        }
     }
 
-    const handleProductUnDelete=(productId)=>{
-        dispatch(undeleteProductByIdAsync(productId))
+    const handleProductUnDelete=(productId, productTitle)=>{
+        if(window.confirm(`Are you sure you want to restore "${productTitle}"?`)) {
+            dispatch(undeleteProductByIdAsync(productId))
+            toast.info("Restoring product...");
+        }
     }
 
     const handleFilterClose=()=>{
@@ -109,11 +131,11 @@ export const AdminDashBoard = () => {
 
 
         <Stack rowGap={2} mt={4} >
-            <Typography sx={{cursor:"pointer"}} variant='body2'>Totes</Typography>
-            <Typography sx={{cursor:"pointer"}} variant='body2'>Backpacks</Typography>
-            <Typography sx={{cursor:"pointer"}} variant='body2'>Travel Bags</Typography>
-            <Typography sx={{cursor:"pointer"}} variant='body2'>Hip Bags</Typography>
-            <Typography sx={{cursor:"pointer"}} variant='body2'>Laptop Sleeves</Typography>
+            <Typography sx={{cursor:"pointer"}} variant='body2'>Web Scrapers</Typography>
+            <Typography sx={{cursor:"pointer"}} variant='body2'>API Tools</Typography>
+            <Typography sx={{cursor:"pointer"}} variant='body2'>Data Analytics</Typography>
+            <Typography sx={{cursor:"pointer"}} variant='body2'>Testing Automation</Typography>
+            <Typography sx={{cursor:"pointer"}} variant='body2'>Workflow Builders</Typography>
         </Stack>
 
         {/* brand filters */}
@@ -199,9 +221,9 @@ export const AdminDashBoard = () => {
                             <Button component={Link} to={`/admin/product-update/${product._id}`} variant='contained'>Update</Button>
                             {
                                 product.isDeleted===true?(
-                                    <Button onClick={()=>handleProductUnDelete(product._id)} color='error' variant='outlined'>Un-delete</Button>
+                                    <Button onClick={()=>handleProductUnDelete(product._id, product.title)} color='success' variant='outlined'>Restore</Button>
                                 ):(
-                                    <Button onClick={()=>handleProductDelete(product._id)} color='error' variant='outlined'>Delete</Button>
+                                    <Button onClick={()=>handleProductDelete(product._id, product.title)} color='error' variant='outlined'>Delete</Button>
                                 )
                             }
                         </Stack>

@@ -17,7 +17,7 @@ import { ITEMS_PER_PAGE } from '../../../constants'
 import {createWishlistItemAsync, deleteWishlistItemByIdAsync, resetWishlistItemAddStatus, resetWishlistItemDeleteStatus, selectWishlistItemAddStatus, selectWishlistItemDeleteStatus, selectWishlistItems} from '../../wishlist/WishlistSlice'
 import {selectLoggedInUser} from '../../auth/AuthSlice'
 import {toast} from 'react-toastify'
-import {banner1, banner2, banner3, banner4, loadingAnimation} from '../../../assets'
+import {banner1, banner2, loadingAnimation} from '../../../assets'
 import { resetCartItemAddStatus, selectCartItemAddStatus } from '../../cart/CartSlice'
 import { motion } from 'framer-motion'
 import { ProductBanner } from './ProductBanner'
@@ -31,7 +31,7 @@ const sortOptions=[
 ]
 
 
-const bannerImages=[banner1,banner3,banner2,banner4]
+const bannerImages=[banner1, banner2, banner1, banner2]
 
 export const ProductList = () => {
     const [filters,setFilters]=useState({})
@@ -201,11 +201,11 @@ export const ProductList = () => {
 
 
                     <Stack rowGap={2} mt={4} >
-                        <Typography sx={{cursor:"pointer"}} variant='body2'>Totes</Typography>
-                        <Typography sx={{cursor:"pointer"}} variant='body2'>Backpacks</Typography>
-                        <Typography sx={{cursor:"pointer"}} variant='body2'>Travel Bags</Typography>
-                        <Typography sx={{cursor:"pointer"}} variant='body2'>Hip Bags</Typography>
-                        <Typography sx={{cursor:"pointer"}} variant='body2'>Laptop Sleeves</Typography>
+                        <Typography sx={{cursor:"pointer"}} variant='body2'>Web Scrapers</Typography>
+                        <Typography sx={{cursor:"pointer"}} variant='body2'>API Tools</Typography>
+                        <Typography sx={{cursor:"pointer"}} variant='body2'>Data Analytics</Typography>
+                        <Typography sx={{cursor:"pointer"}} variant='body2'>Testing Automation</Typography>
+                        <Typography sx={{cursor:"pointer"}} variant='body2'>Workflow Builders</Typography>
                     </Stack>
 
                     {/* brand filters */}

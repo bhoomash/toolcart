@@ -47,11 +47,22 @@ export const ProductCard = ({id,title,price,thumbnail,brand,stockQuantity,handle
     {
 
     isProductAlreadyinWishlist!==-1 ?
-    <Stack component={isAdminCard?"":isWishlistCard?"":is408?'':Paper} mt={is408?2:0} elevation={1} p={2} width={is408?'auto':is488?"200px":is608?"240px":is752?"300px":is932?'240px':is1410?'300px':'340px'} sx={{cursor:"pointer"}} onClick={()=>navigate(`/product-details/${id}`)}>
+    <Stack component={isAdminCard?"":isWishlistCard?"":is408?'':Paper} mt={is408?2:0} elevation={1} p={2} width={is408?'auto':is488?"200px":is608?"240px":is752?"300px":is932?'240px':is1410?'300px':'340px'}>
 
         {/* image display */}
         <Stack>
-            <img width={'100%'} style={{aspectRatio:1/1,objectFit:"contain"}} height={'100%'}  src={thumbnail} alt={`${title} photo unavailable`} />
+            <img 
+                width={'100%'} 
+                style={{
+                    aspectRatio:1/1,
+                    objectFit:"contain",
+                    cursor:"pointer"
+                }} 
+                height={'100%'}  
+                src={thumbnail} 
+                alt={`${title} photo unavailable`}
+                onClick={() => navigate(`/product-details/${id}`)}
+            />
         </Stack>
 
         {/* lower section */}
@@ -71,7 +82,7 @@ export const ProductCard = ({id,title,price,thumbnail,brand,stockQuantity,handle
             </Stack>
 
             <Stack sx={{flexDirection:"row",justifyContent:"space-between",alignItems:"center"}}>
-                <Typography>${price}</Typography>
+                <Typography>₹{price}</Typography>
                 {
                     !isWishlistCard? isProductAlreadyInCart?
                     'Added to cart'

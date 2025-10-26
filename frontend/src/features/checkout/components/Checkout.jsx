@@ -12,6 +12,7 @@ import { resetCartByUserIdAsync, selectCartItems } from '../../cart/CartSlice'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { SHIPPING, TAXES } from '../../../constants'
 import {motion} from 'framer-motion'
+import PaymentComponent from '../../payment/components/PaymentComponent'
 
 
 export const Checkout = () => {
@@ -19,7 +20,8 @@ export const Checkout = () => {
     const status=''
     const addresses=useSelector(selectAddresses)
     const [selectedAddress,setSelectedAddress]=useState(addresses[0])
-    const [selectedPaymentMethod,setSelectedPaymentMethod]=useState('cash')
+    const [selectedPaymentMethod,setSelectedPaymentMethod]=useState('razorpay')
+    const [showPayment, setShowPayment] = useState(false)
     const { register, handleSubmit, watch, reset,formState: { errors }} = useForm()
     const dispatch=useDispatch()
     const loggedInUser=useSelector(selectLoggedInUser)
@@ -29,6 +31,7 @@ export const Checkout = () => {
     const orderStatus=useSelector(selectOrderStatus)
     const currentOrder=useSelector(selectCurrentOrder)
     const orderTotal=cartItems.reduce((acc,item)=>(item.product.price*item.quantity)+acc,0)
+    const finalTotal = orderTotal + SHIPPING + TAXES
     const theme=useTheme()
     const is900=useMediaQuery(theme.breakpoints.down(900))
     const is480=useMediaQuery(theme.breakpoints.down(480))
@@ -55,8 +58,49 @@ export const Checkout = () => {
     }
 
     const handleCreateOrder=()=>{
-        const order={user:loggedInUser._id,item:cartItems,address:selectedAddress,paymentMode:selectedPaymentMethod,total:orderTotal+SHIPPING+TAXES}
+        if (selectedPaymentMethod === 'razorpay') {
+            setShowPayment(true);
+        } else {
+            // For COD, create order directly
+            const order={
+                user:loggedInUser._id,
+                item:cartItems,
+                address:selectedAddress,
+                paymentMode:selectedPaymentMethod,
+                total:finalTotal,
+                paymentStatus: selectedPaymentMethod === 'COD' ? 'pending' : 'paid'
+            }
+            dispatch(createOrderAsync(order))
+        }
+    }
+
+    const handlePaymentSuccess = (paymentData) => {
+        // Create order with payment details
+        const order = {
+            user: loggedInUser._id,
+            item: cartItems,
+            address: selectedAddress,
+            paymentMode: 'razorpay',
+            total: finalTotal,
+            paymentStatus: 'paid',
+            paymentId: paymentData.paymentId,
+            razorpayOrderId: paymentData.razorpay_order_id,
+            razorpaySignature: paymentData.razorpay_signature
+        }
         dispatch(createOrderAsync(order))
+        setShowPayment(false)
+    }
+
+    const handlePaymentCancel = () => {
+        setShowPayment(false)
+    }
+
+    const orderData = {
+        amount: finalTotal * 100, // Razorpay expects amount in paise
+        currency: 'INR',
+        items: cartItems,
+        address: selectedAddress,
+        user: loggedInUser
     }
 
   return (
@@ -162,12 +206,12 @@ export const Checkout = () => {
 
                         <Stack flexDirection={'row'} justifyContent={'flex-start'} alignItems={'center'}>
                             <Radio value={selectedPaymentMethod} name='paymentMethod' checked={selectedPaymentMethod==='COD'} onChange={()=>setSelectedPaymentMethod('COD')}/>
-                            <Typography>Cash</Typography>
+                            <Typography>Cash on Delivery</Typography>
                         </Stack>
 
                         <Stack flexDirection={'row'} justifyContent={'flex-start'} alignItems={'center'}>
-                            <Radio value={selectedPaymentMethod} name='paymentMethod' checked={selectedPaymentMethod==='CARD'} onChange={()=>setSelectedPaymentMethod('CARD')}/>
-                            <Typography>Card</Typography>
+                            <Radio value={selectedPaymentMethod} name='paymentMethod' checked={selectedPaymentMethod==='razorpay'} onChange={()=>setSelectedPaymentMethod('razorpay')}/>
+                            <Typography>Online Payment (Razorpay)</Typography>
                         </Stack>
 
                     </Stack>
@@ -180,7 +224,26 @@ export const Checkout = () => {
         <Stack  width={is900?'100%':'auto'} alignItems={is900?'flex-start':''}>
             <Typography variant='h4'>Order summary</Typography>
             <Cart checkout={true}/>
-            <LoadingButton fullWidth loading={orderStatus==='pending'} variant='contained' onClick={handleCreateOrder} size='large'>Pay and order</LoadingButton>
+            
+            {showPayment ? (
+                <PaymentComponent 
+                    orderData={orderData}
+                    onPaymentSuccess={handlePaymentSuccess}
+                    onPaymentCancel={handlePaymentCancel}
+                    selectedAddress={selectedAddress}
+                />
+            ) : (
+                <LoadingButton 
+                    fullWidth 
+                    loading={orderStatus==='pending'} 
+                    variant='contained' 
+                    onClick={handleCreateOrder} 
+                    size='large'
+                    disabled={!selectedAddress}
+                >
+                    {selectedPaymentMethod === 'razorpay' ? 'Proceed to Payment' : 'Place Order'}
+                </LoadingButton>
+            )}
         </Stack>
 
     </Stack>

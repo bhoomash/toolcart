@@ -27,6 +27,13 @@ exports.getAll = async (req, res) => {
             filter.category={$in:req.query.category}
         }
 
+        if(req.query.search){
+            filter.$or=[
+                {title:{$regex:req.query.search,$options:'i'}},
+                {description:{$regex:req.query.search,$options:'i'}}
+            ]
+        }
+
         if(req.query.user){
             filter['isDeleted']=false
         }

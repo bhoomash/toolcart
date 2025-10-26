@@ -7,6 +7,7 @@ import { HomePage } from "./HomePage";
 import { LoginPage } from "./LoginPage";
 import { OrderSuccessPage } from "./OrderSuccessPage";
 import { OtpVerificationPage } from "./OtpVerificationPage";
+import PaymentPage from "./PaymentPage";
 import { ProductDetailsPage } from "./ProductDetailsPage";
 import { ProductUpdatePage } from "./ProductUpdatePage";
 import { ResetPasswordPage } from "./ResetPasswordPage";
@@ -25,6 +26,7 @@ export {
     CartPage,
     UserProfilePage,
     CheckoutPage,
+    PaymentPage,
     OrderSuccessPage,
     UserOrdersPage,
     ProductUpdatePage,

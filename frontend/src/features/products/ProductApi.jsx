@@ -31,6 +31,10 @@ export const fetchProducts=async(filters)=>{
         queryString+=`sort=${filters.sort.sort}&order=${filters.sort.order}&`
     }
 
+    if(filters.search){
+        queryString+=`search=${encodeURIComponent(filters.search)}&`
+    }
+
     if(filters.user){
         queryString+=`user=${filters.user}&`
     }
