@@ -25,10 +25,38 @@ connectToDB()
 
 
 // middlewares
-server.use(cors({origin:process.env.ORIGIN,credentials:true,exposedHeaders:['X-Total-Count'],methods:['GET','POST','PATCH','DELETE']}))
+const allowedOrigins = [
+    process.env.ORIGIN,
+    'https://your-vercel-app.vercel.app', // Update this with your actual Vercel domain
+    'http://localhost:3000'
+];
+
+server.use(cors({
+    origin: function (origin, callback) {
+        // allow requests with no origin (mobile apps, etc.)
+        if (!origin) return callback(null, true);
+        if (allowedOrigins.includes(origin)) {
+            return callback(null, true);
+        }
+        return callback(new Error('Not allowed by CORS'));
+    },
+    credentials: true,
+    exposedHeaders: ['X-Total-Count'],
+    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT', 'OPTIONS']
+}));
+
 server.use(express.json())
 server.use(cookieParser())
 server.use(morgan("tiny"))
+
+// Health check endpoint for monitoring
+server.get('/health', (req, res) => {
+    res.json({ 
+        status: 'OK', 
+        timestamp: new Date().toISOString(),
+        environment: process.env.NODE_ENV || 'development'
+    });
+});
 
 // routeMiddleware
 server.use("/auth",authRoutes)

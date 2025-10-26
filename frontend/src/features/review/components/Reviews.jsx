@@ -1,7 +1,7 @@
-import { Button, IconButton, LinearProgress, Pagination, Rating, Stack, TextField, Typography, useMediaQuery } from '@mui/material'
-import React, { useEffect, useRef, useState } from 'react'
+import { Button, LinearProgress, Rating, Stack, TextField, Typography, useMediaQuery } from '@mui/material'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { createReviewAsync, resetReviewAddStatus, resetReviewDeleteStatus, resetReviewUpdateStatus, selectReviewAddStatus, selectReviewDeleteStatus, selectReviewStatus, selectReviewUpdateStatus, selectReviews } from '../ReviewSlice'
+import { createReviewAsync, resetReviewAddStatus, resetReviewDeleteStatus, resetReviewUpdateStatus, selectReviewAddStatus, selectReviewDeleteStatus, selectReviewUpdateStatus, selectReviews } from '../ReviewSlice'
 import { ReviewItem } from './ReviewItem'
 import { LoadingButton } from '@mui/lab'
 import { useForm } from 'react-hook-form'
@@ -10,17 +10,14 @@ import {toast} from 'react-toastify'
 import CreateIcon from '@mui/icons-material/Create';
 import {MotionConfig, motion} from 'framer-motion'
 import { useTheme } from '@mui/material'
-import CloseIcon from '@mui/icons-material/Close';
 
 export const Reviews = ({productId,averageRating}) => {
 
     const dispatch=useDispatch()
     const reviews=useSelector(selectReviews)
     const [value,setValue]=useState(1)
-    const {register,handleSubmit,reset,formState: { errors }} = useForm()
+    const {register,handleSubmit,reset} = useForm()
     const loggedInUser=useSelector(selectLoggedInUser)
-    const reviewStatus=useSelector(selectReviewStatus)
-    const ref=useRef(null)
     
 
 
@@ -84,7 +81,7 @@ export const Reviews = ({productId,averageRating}) => {
         1:0
     }
 
-    reviews.map((review)=>{
+    reviews.forEach((review)=>{
         ratingCounts[review.rating]=ratingCounts[review.rating]+1
     })
 
@@ -171,7 +168,7 @@ export const Reviews = ({productId,averageRating}) => {
                     <Stack flexDirection={'row'} alignSelf={'flex-end'} alignItems={'center'} columnGap={'.2rem'}>
                         <MotionConfig whileTap={{scale:1}} whileHover={{scale:1.050}}>
                             <motion.div>
-                                <LoadingButton sx={{textTransform:"none",fontSize:is480?"":"1rem"}} size={is480?"small":""} loading={reviewStatus==='pending'} type='submit' variant='contained'>Add review</LoadingButton>
+                                <LoadingButton sx={{textTransform:"none",fontSize:is480?"":"1rem"}} size={is480?"small":""} loading={reviewAddStatus==='pending'} type='submit' variant='contained'>Add review</LoadingButton>
                             </motion.div>
                             <motion.div>
                                 <Button onClick={()=>setWriteReview(false)} color='error' size={is480?"small":""} variant='outlined' sx={{textTransform:"none",fontSize:is480?"":"1rem"}}>Cancel</Button>

@@ -8,7 +8,7 @@ import Avatar from '@mui/material/Avatar';
 import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import { Link, useNavigate } from 'react-router-dom';
-import { Badge, Button, Chip, Stack, useMediaQuery, useTheme, Box, Divider, TextField, InputAdornment } from '@mui/material';
+import { Badge, Chip, Stack, useMediaQuery, useTheme, Box, Divider, TextField, InputAdornment } from '@mui/material';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUserInfo } from '../../user/UserSlice';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
@@ -719,7 +719,6 @@ export const Navbar=({isProductList=false})=> {
                     to={setting.to} 
                     sx={{ 
                       textDecoration: "none", 
-                      color: 'text.primary',
                       fontWeight: setting.name === 'Logout' ? 600 : 400,
                       color: setting.name === 'Logout' ? '#d32f2f' : 'text.primary'
                     }}

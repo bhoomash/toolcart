@@ -1,9 +1,9 @@
-import {Box, FormHelperText, Stack, TextField, Typography, useMediaQuery, useTheme } from '@mui/material'
+import {FormHelperText, Stack, TextField, Typography, useMediaQuery, useTheme } from '@mui/material'
 import React, { useEffect } from 'react'
 import Lottie from 'lottie-react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useForm } from "react-hook-form"
-import { ecommerceOutlookAnimation, shoppingBagAnimation} from '../../../assets'
+import { ecommerceOutlookAnimation} from '../../../assets'
 import {useDispatch,useSelector} from 'react-redux'
 import { LoadingButton } from '@mui/lab';
 import {selectLoggedInUser,loginAsync,selectLoginStatus, selectLoginError, clearLoginError, resetLoginStatus} from '../AuthSlice'
