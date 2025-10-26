@@ -27,22 +27,41 @@ connectToDB()
 // middlewares
 const allowedOrigins = [
     process.env.ORIGIN,
-    'https://toolcart-gamma.vercel.app', // Your actual Vercel domain
-    'http://localhost:3000'
+    'https://toolcart-gamma.vercel.app',
+    'https://your-vercel-app.vercel.app', // Keep as fallback
+    'http://localhost:3000',
+    'http://localhost:3001'
 ];
 
 server.use(cors({
     origin: function (origin, callback) {
-        // allow requests with no origin (mobile apps, etc.)
+        console.log('CORS Origin:', origin); // Debug log
+        
+        // Allow requests with no origin (mobile apps, etc.)
         if (!origin) return callback(null, true);
+        
+        // Allow all Vercel deployments
+        if (origin.includes('vercel.app')) {
+            return callback(null, true);
+        }
+        
+        // Allow localhost for development
+        if (origin.includes('localhost')) {
+            return callback(null, true);
+        }
+        
+        // Check allowed origins list
         if (allowedOrigins.includes(origin)) {
             return callback(null, true);
         }
+        
+        console.log('CORS blocked origin:', origin);
         return callback(new Error('Not allowed by CORS'));
     },
     credentials: true,
     exposedHeaders: ['X-Total-Count'],
-    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT', 'OPTIONS']
+    methods: ['GET', 'POST', 'PATCH', 'DELETE', 'PUT', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'X-Requested-With', 'Accept', 'Origin']
 }));
 
 server.use(express.json())
