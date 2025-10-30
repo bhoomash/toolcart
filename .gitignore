@@ -2,23 +2,42 @@
 node_modules/
 */node_modules/
 
-# Environment variables
+# Environment variables - CRITICAL: Never commit these!
 .env
 .env.local
 .env.development.local
 .env.test.local
 .env.production.local
+*.env
+!.env.example
 
 # Backend environment files
 backend/.env
 backend/.env.local
 backend/.env.development
 backend/.env.production
+!backend/.env.example
 
-# Frontend environment files (but keep templates for Vercel)
-frontend/.env
+# Frontend environment files
 frontend/.env.local
-# Keep .env.development and .env.production for deployment
+# Keep .env.development and .env.production for deployment templates
+
+# Security and sensitive files
+config/secrets.js
+config/keys.js
+*.pem
+*.key
+*.crt
+*.p12
+*.pfx
+
+# AWS credentials
+.aws/
+aws-config.json
+
+# Firebase config with credentials
+firebase-config.js
+firebase-adminsdk-*.json
 
 # Build outputs
 frontend/build/
@@ -30,6 +49,10 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 lerna-debug.log*
+
+# Application logs
+backend/logs/
+*.log
 
 # Runtime data
 pids

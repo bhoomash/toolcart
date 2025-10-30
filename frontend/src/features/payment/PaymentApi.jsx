@@ -1,8 +1,8 @@
-import { axiosi } from "../../config/axios";
+import { axiosInstance } from "../../config/axios";
 
 export const createPaymentOrder = async (orderData) => {
     try {
-        const res = await axiosi.post('/payments/create-order', orderData);
+        const res = await axiosInstance.post('/payments/create-order', orderData);
         return res.data;
     } catch (error) {
         throw error.response.data;
@@ -11,7 +11,7 @@ export const createPaymentOrder = async (orderData) => {
 
 export const verifyPayment = async (paymentData) => {
     try {
-        const res = await axiosi.post('/payments/verify', paymentData);
+        const res = await axiosInstance.post('/payments/verify', paymentData);
         return res.data;
     } catch (error) {
         throw error.response.data;
@@ -20,7 +20,7 @@ export const verifyPayment = async (paymentData) => {
 
 export const handlePaymentFailure = async (failureData) => {
     try {
-        const res = await axiosi.post('/payments/failure', failureData);
+        const res = await axiosInstance.post('/payments/failure', failureData);
         return res.data;
     } catch (error) {
         throw error.response.data;
@@ -29,7 +29,7 @@ export const handlePaymentFailure = async (failureData) => {
 
 export const getPaymentDetails = async (paymentId) => {
     try {
-        const res = await axiosi.get(`/payments/details/${paymentId}`);
+        const res = await axiosInstance.get(`/payments/details/${paymentId}`);
         return res.data;
     } catch (error) {
         throw error.response.data;

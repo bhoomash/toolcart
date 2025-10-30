@@ -25,10 +25,7 @@ import ClearIcon from '@mui/icons-material/Clear';
 import Lottie from 'lottie-react'
 
 
-const sortOptions=[
-    {name:"Price: low to high",sort:"price",order:"asc"},
-    {name:"Price: high to low",sort:"price",order:"desc"},
-]
+// Removed sort options
 
 
 const bannerImages=[banner1, banner2, banner1, banner2]
@@ -36,7 +33,7 @@ const bannerImages=[banner1, banner2, banner1, banner2]
 export const ProductList = () => {
     const [filters,setFilters]=useState({})
     const [page,setPage]=useState(1)
-    const [sort,setSort]=useState(null)
+    // Removed sort state
     const theme=useTheme()
 
     const is1200=useMediaQuery(theme.breakpoints.down(1200))
@@ -101,7 +98,6 @@ export const ProductList = () => {
         const finalFilters={...filters}
 
         finalFilters['pagination']={page:page,limit:ITEMS_PER_PAGE}
-        finalFilters['sort']=sort
 
         if(!loggedInUser?.isAdmin){
             finalFilters['user']=true
@@ -109,7 +105,7 @@ export const ProductList = () => {
 
         dispatch(fetchProductsAsync(finalFilters))
         
-    },[filters,page,sort])
+    },[filters,page])
 
 
     const handleAddRemoveFromWishlist=(e,productId)=>{
@@ -268,30 +264,7 @@ export const ProductList = () => {
                 {/* products */}
                 <Stack rowGap={5} mt={is600?2:0}>
 
-                    {/* sort options */}
-                    <Stack flexDirection={'row'} mr={'2rem'} justifyContent={'flex-end'} alignItems={'center'} columnGap={5}>
-                                        
-                        <Stack alignSelf={'flex-end'} width={'12rem'}>
-                            <FormControl fullWidth>
-                                    <InputLabel id="sort-dropdown">Sort</InputLabel>
-                                    <Select
-                                        variant='standard'
-                                        labelId="sort-dropdown"
-                                        label="Sort"
-                                        onChange={(e)=>setSort(e.target.value)}
-                                        value={sort}
-                                    >
-                                        <MenuItem bgcolor='text.secondary' value={null}>Reset</MenuItem>
-                                        {
-                                            sortOptions.map((option)=>(
-                                                <MenuItem key={option} value={option}>{option.name}</MenuItem>
-                                            ))
-                                        }
-                                    </Select>
-                            </FormControl>
-                        </Stack>
-                    
-                    </Stack>
+                    {/* sort options removed */}
 
                     {/* product grid */}
                     <Grid gap={is700?1:2} container justifyContent={'center'} alignContent={'center'}>

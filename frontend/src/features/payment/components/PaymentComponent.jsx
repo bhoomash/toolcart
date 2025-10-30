@@ -91,7 +91,8 @@ const PaymentComponent = ({ orderData, onPaymentSuccess, onPaymentCancel, select
                 setShowPaymentDialog(true);
             }
         } catch (error) {
-            console.error("Payment initiation error:", error);
+            // Log sanitized error without exposing sensitive payment data
+            console.error("Payment initiation failed");
             setIsProcessing(false);
         }
     };
@@ -100,7 +101,7 @@ const PaymentComponent = ({ orderData, onPaymentSuccess, onPaymentCancel, select
         if (!paymentOrder) return;
 
         const options = {
-            key: process.env.REACT_APP_RAZORPAY_KEY_ID || "rzp_test_R5uZgmenogCy4j",
+            key: process.env.REACT_APP_RAZORPAY_KEY_ID,
             amount: paymentOrder.amount,
             currency: paymentOrder.currency,
             name: "ToolCart",
@@ -162,7 +163,8 @@ const PaymentComponent = ({ orderData, onPaymentSuccess, onPaymentCancel, select
                 onPaymentSuccess && onPaymentSuccess(verifyResult.payload);
             }
         } catch (error) {
-            console.error("Payment verification error:", error);
+            // Log sanitized error without exposing payment verification details
+            console.error("Payment verification failed");
         } finally {
             setIsProcessing(false);
         }
@@ -181,7 +183,8 @@ const PaymentComponent = ({ orderData, onPaymentSuccess, onPaymentCancel, select
             
             alert(`Payment failed: ${error.description || "Unknown error"}`);
         } catch (err) {
-            console.error("Payment failure handling error:", err);
+            // Log sanitized error without exposing payment failure details
+            console.error("Payment failure handling error occurred");
         }
     };
 

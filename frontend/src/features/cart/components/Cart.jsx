@@ -50,19 +50,86 @@ export const Cart = ({checkout}) => {
   return (
     <Stack justifyContent={'flex-start'} alignItems={'center'} mb={'5rem'} >
 
-        <Stack width={is900?'auto':'50rem'} mt={'3rem'} paddingLeft={checkout?0:2} paddingRight={checkout?0:2} rowGap={4} >
+        {/* Desktop Layout */}
+        {!is900 && !checkout && (
+            <Stack width={'90%'} maxWidth={'1200px'} mt={'3rem'} paddingX={4} rowGap={4}>
+                <Stack flexDirection={'row'} spacing={4}>
+                    {/* Cart Items Section */}
+                    <Stack flex={2} rowGap={3}>
+                        <Typography variant='h5' fontWeight={600}>Shopping Cart</Typography>
+                        <Stack rowGap={2}>
+                            {items && items.map((item)=>(
+                                <CartItem key={item._id} id={item._id} title={item.product.title} brand={item.product.brand.name} category={item.product.category.name} price={item.product.price} quantity={item.quantity} thumbnail={item.product.thumbnail} stockQuantity={item.product.stockQuantity} productId={item.product._id}/>
+                            ))}
+                        </Stack>
+                    </Stack>
 
-            {/* cart items */}
-            <Stack rowGap={2}>
-            {
-                items && items.map((item)=>(
-                    <CartItem key={item._id} id={item._id} title={item.product.title} brand={item.product.brand.name} category={item.product.category.name} price={item.product.price} quantity={item.quantity} thumbnail={item.product.thumbnail} stockQuantity={item.product.stockQuantity} productId={item.product._id}/>
-                ))
-            }
+                    {/* Order Summary Section */}
+                    <Stack flex={1} bgcolor={'#f8f9fa'} p={3} borderRadius={2} height={'fit-content'} position={'sticky'} top={20}>
+                        <Typography variant='h6' fontWeight={600} mb={2}>Order Summary</Typography>
+                        
+                        <Stack rowGap={2} mb={3}>
+                            <Stack flexDirection={'row'} justifyContent={'space-between'}>
+                                <Typography>Items ({totalItems})</Typography>
+                                <Typography>${subtotal}</Typography>
+                            </Stack>
+                            <Stack flexDirection={'row'} justifyContent={'space-between'}>
+                                <Typography>Estimated Shipping</Typography>
+                                <Typography>Free</Typography>
+                            </Stack>
+                            <Stack flexDirection={'row'} justifyContent={'space-between'}>
+                                <Typography>Estimated Tax</Typography>
+                                <Typography>Calculated at checkout</Typography>
+                            </Stack>
+                        </Stack>
+
+                        <hr style={{margin: '16px 0', border: 'none', borderTop: '1px solid #ddd'}}/>
+
+                        <Stack flexDirection={'row'} justifyContent={'space-between'} mb={3}>
+                            <Typography variant='h6' fontWeight={600}>Order Total</Typography>
+                            <Typography variant='h6' fontWeight={600}>${subtotal}</Typography>
+                        </Stack>
+
+                        <Button 
+                            variant='contained' 
+                            component={Link} 
+                            to='/checkout'
+                            size='large'
+                            fullWidth
+                            sx={{mb: 2}}
+                        >
+                            Proceed to Checkout
+                        </Button>
+                        
+                        <motion.div style={{alignSelf:'center'}} whileHover={{y:2}}>
+                            <Chip 
+                                sx={{cursor:"pointer",borderRadius:"8px"}} 
+                                component={Link} 
+                                to={'/'} 
+                                label="Continue Shopping" 
+                                variant='outlined'
+                            />
+                        </motion.div>
+                    </Stack>
+                </Stack>
             </Stack>
-            
-            {/* subtotal */}
-            <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
+        )}
+
+        {/* Mobile/Tablet Layout & Checkout Layout */}
+        {(is900 || checkout) && (
+            <Stack width={is900?'auto':'50rem'} mt={'3rem'} paddingLeft={checkout?0:2} paddingRight={checkout?0:2} rowGap={4} >
+
+                {/* cart items */}
+                <Stack rowGap={2}>
+                {
+                    items && items.map((item)=>(
+                        <CartItem key={item._id} id={item._id} title={item.product.title} brand={item.product.brand.name} category={item.product.category.name} price={item.product.price} quantity={item.quantity} thumbnail={item.product.thumbnail} stockQuantity={item.product.stockQuantity} productId={item.product._id}/>
+                    ))
+                }
+                </Stack>
+                
+                {/* subtotal */}
+                <Stack flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
 
                 {
                     checkout?(
@@ -119,8 +186,9 @@ export const Cart = ({checkout}) => {
             }
     
         </Stack>
+        )}
 
-
+    
     </Stack>
   )
 }

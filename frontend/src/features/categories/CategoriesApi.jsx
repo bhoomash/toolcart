@@ -1,8 +1,8 @@
-import { axiosi } from "../../config/axios"
+import { axiosInstance } from "../../config/axios"
 
-export const fetchAllCategories=async()=>{
+export const fetchCategories=async()=>{
     try {
-        const res=await axiosi.get("/categories")
+        const res=await axiosInstance.get("/categories")
         return res.data
     } catch (error) {
         throw error.response.data

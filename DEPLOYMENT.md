@@ -8,18 +8,18 @@ Create these environment variables in your Vercel project dashboard:
 
 #### Backend Environment Variables:
 ```
-MONGO_URI=mongodb+srv://bhoomashr_db_user:Bhoo%402006@cluster0.xjeiqej.mongodb.net/toolcart?retryWrites=true&w=majority&appName=Cluster0
+MONGO_URI=mongodb+srv://username:password@cluster.mongodb.net/database_name
 ORIGIN=https://your-vercel-app.vercel.app
-EMAIL=anirudh200503@gmail.com
-PASSWORD=tprg hxae lctn sszk
+EMAIL=your-email@gmail.com
+PASSWORD=your-email-app-password
 LOGIN_TOKEN_EXPIRATION=30d
 OTP_EXPIRATION_TIME=120000
 PASSWORD_RESET_TOKEN_EXPIRATION=2m
 COOKIE_EXPIRATION_DAYS=30
-SECRET_KEY=your-secret-key-change-this-in-production
-RAZORPAY_KEY_ID=rzp_test_R5uZgmenogCy4j
-RAZORPAY_KEY_SECRET=iou4q509iexeJOlJNCpq7gBd
-RAZORPAY_WEBHOOK_SECRET=webhook_secret_123
+SECRET_KEY=your-super-secure-jwt-secret-key-here
+RAZORPAY_KEY_ID=rzp_test_or_live_key_id
+RAZORPAY_KEY_SECRET=your_razorpay_secret_key
+RAZORPAY_WEBHOOK_SECRET=your_webhook_secret
 PRODUCTION=true
 NODE_ENV=production
 ```

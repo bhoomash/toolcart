@@ -1,8 +1,8 @@
-import { axiosi } from "../../config/axios"
+import { axiosInstance } from "../../config/axios"
 
-export const fetchLoggedInUserById=async(id)=>{
+export const getUserById=async(id)=>{
     try {
-        const res=await axiosi.get(`/users/${id}`)
+        const res=await axiosInstance.get(`/users/${id}`)
         return res.data
     } catch (error) {
         throw error.response.data
@@ -10,7 +10,7 @@ export const fetchLoggedInUserById=async(id)=>{
 }
 export const updateUserById=async(update)=>{
     try {
-        const res=await axiosi.patch(`/users/${update._id}`,update)
+        const res=await axiosInstance.patch(`/users/${update._id}`,update)
         return res.data
     } catch (error) {
         throw error.response.data

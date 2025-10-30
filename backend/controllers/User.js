@@ -1,26 +1,27 @@
 const User=require("../models/User")
+const { asyncErrorHandler, AppError } = require('../middleware/ErrorHandler');
 
-exports.getById=async(req,res)=>{
-    try {
-        const {id}=req.params
-        const result=(await User.findById(id)).toObject()
-        delete result.password
-        res.status(200).json(result)
-        
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({message:'Error getting your details, please try again later'})
+exports.getById = asyncErrorHandler(async(req,res,next) => {
+    const {id} = req.params
+    const result = await User.findById(id)
+    
+    if(!result) {
+        throw new AppError('User not found', 404, 'USER_NOT_FOUND');
     }
-}
-exports.updateById=async(req,res)=>{
-    try {
-        const {id}=req.params
-        const updated=(await User.findByIdAndUpdate(id,req.body,{new:true})).toObject()
-        delete updated.password
-        res.status(200).json(updated)
-
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({message:'Error getting your details, please try again later'})
+    
+    const userObject = result.toObject()
+    delete userObject.password
+    res.status(200).json(userObject)
+});
+exports.updateById = asyncErrorHandler(async(req,res,next) => {
+    const {id} = req.params
+    const updated = await User.findByIdAndUpdate(id,req.body,{new:true})
+    
+    if(!updated) {
+        throw new AppError('User not found', 404, 'USER_NOT_FOUND');
     }
-}
+    
+    const userObject = updated.toObject()
+    delete userObject.password
+    res.status(200).json(userObject)
+});

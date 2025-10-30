@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import { fetchAllCategories } from './CategoriesApi'
+import { fetchCategories } from './CategoriesApi'
 
 const initialState={
     status:"idle",
@@ -8,7 +8,7 @@ const initialState={
 }
 
 export const fetchAllCategoriesAsync=createAsyncThunk('categories/fetchAllCategoriesAsync',async()=>{
-    const categories=await fetchAllCategories()
+    const categories=await fetchCategories()
     return categories
 })
 

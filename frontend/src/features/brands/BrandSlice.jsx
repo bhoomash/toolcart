@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import { fetchAllBrands } from './BrandApi'
+import { fetchBrands } from './BrandApi'
 
 const initialState={
     status:"idle",
@@ -8,7 +8,7 @@ const initialState={
 }
 
 export const fetchAllBrandsAsync=createAsyncThunk('brands/fetchAllBrandsAsync',async()=>{
-    const brands=await fetchAllBrands()
+    const brands=await fetchBrands()
     return brands
 })
 

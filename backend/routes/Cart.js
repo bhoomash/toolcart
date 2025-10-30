@@ -1,12 +1,13 @@
 const express=require('express')
 const cartController=require('../controllers/Cart')
+const { cartValidators } = require('../middleware/ValidationMiddleware')
 const router=express.Router()
 
 router
-    .post("/",cartController.create)
-    .get("/user/:id",cartController.getByUserId)
-    .patch("/:id",cartController.updateById)
-    .delete("/:id",cartController.deleteById)
-    .delete("/user/:id",cartController.deleteByUserId)
+    .post("/", cartValidators.create, cartController.create)
+    .get("/user/:id", cartValidators.getByUserId, cartController.getByUserId)
+    .patch("/:id", cartValidators.update, cartController.updateById)
+    .delete("/:id", cartValidators.delete, cartController.deleteById)
+    .delete("/user/:id", cartValidators.getByUserId, cartController.deleteByUserId)
 
 module.exports=router

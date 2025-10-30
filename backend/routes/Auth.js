@@ -2,16 +2,23 @@ const express=require('express')
 const router=express.Router()
 const authController=require("../controllers/Auth")
 const { verifyToken } = require('../middleware/VerifyToken')
+const { authValidators } = require('../middleware/ValidationMiddleware')
+const { 
+  authRateLimiter, 
+  passwordResetRateLimiter, 
+  otpRateLimiter, 
+  createAccountRateLimiter 
+} = require('../middleware/RateLimiter')
 
 router
-    .post("/signup",authController.signup)
-    .post('/login',authController.login)
-    .post("/verify-otp",authController.verifyOtp)
-    .post("/resend-otp",authController.resendOtp)
-    .post("/forgot-password",authController.forgotPassword)
-    .post("/reset-password",authController.resetPassword)
-    .get("/check-auth",verifyToken,authController.checkAuth)
-    .get('/logout',authController.logout)
+    .post("/signup", createAccountRateLimiter, authValidators.register, authController.signup)
+    .post('/login', authRateLimiter, authValidators.login, authController.login)
+    .post("/verify-otp", otpRateLimiter, authValidators.verifyOtp, authController.verifyOtp)
+    .post("/resend-otp", otpRateLimiter, authValidators.verifyOtp, authController.resendOtp)
+    .post("/forgot-password", passwordResetRateLimiter, authValidators.forgotPassword, authController.forgotPassword)
+    .post("/reset-password", passwordResetRateLimiter, authValidators.resetPassword, authController.resetPassword)
+    .get("/check-auth", verifyToken, authController.checkAuth)
+    .get('/logout', authController.logout)
 
 
 module.exports=router

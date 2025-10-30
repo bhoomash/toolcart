@@ -95,7 +95,8 @@ export const Navbar=({isProductList=false})=> {
         
         setSearchSuggestions(suggestions.slice(0, 5));
       } catch (error) {
-        console.error('Error fetching suggestions:', error);
+        // Log sanitized error without exposing search API details
+        console.error('Failed to fetch search suggestions');
         setSearchSuggestions([]);
       } finally {
         setLoadingSuggestions(false);

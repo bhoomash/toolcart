@@ -1,8 +1,8 @@
-import { axiosi } from "../../config/axios";
+import { axiosInstance } from "../../config/axios";
 
 export const addProduct=async(data)=>{
     try {
-        const res=await axiosi.post('/products',data)
+        const res=await axiosInstance.post('/products',data)
         return res.data
     } catch (error) {
         throw error.response.data
@@ -27,9 +27,7 @@ export const fetchProducts=async(filters)=>{
         queryString+=`page=${filters.pagination.page}&limit=${filters.pagination.limit}&`
     }
 
-    if(filters.sort){
-        queryString+=`sort=${filters.sort.sort}&order=${filters.sort.order}&`
-    }
+    // Removed sort filter from query string
 
     if(filters.search){
         queryString+=`search=${encodeURIComponent(filters.search)}&`
@@ -40,7 +38,7 @@ export const fetchProducts=async(filters)=>{
     }
     
     try {
-        const res=await axiosi.get(`/products?${queryString}`)
+        const res=await axiosInstance.get(`/products?${queryString}`)
         const totalResults=await res.headers.get("X-Total-Count")
         return {data:res.data,totalResults:totalResults}
     } catch (error) {
@@ -49,7 +47,7 @@ export const fetchProducts=async(filters)=>{
 }
 export const fetchProductById=async(id)=>{
     try {
-        const res=await axiosi.get(`/products/${id}`)
+        const res=await axiosInstance.get(`/products/${id}`)
         return res.data
     } catch (error) {
         throw error.response.data
@@ -57,7 +55,7 @@ export const fetchProductById=async(id)=>{
 }
 export const updateProductById=async(update)=>{
     try {
-        const res=await axiosi.patch(`/products/${update._id}`,update)
+        const res=await axiosInstance.patch(`/products/${update._id}`,update)
         return res.data
     } catch (error) {
         throw error.response.data
@@ -65,7 +63,7 @@ export const updateProductById=async(update)=>{
 }
 export const undeleteProductById=async(id)=>{
     try {
-        const res=await axiosi.patch(`/products/undelete/${id}`)
+        const res=await axiosInstance.patch(`/products/undelete/${id}`)
         return res.data
     } catch (error) {
         throw error.response.data
@@ -73,7 +71,7 @@ export const undeleteProductById=async(id)=>{
 }
 export const deleteProductById=async(id)=>{
     try {
-        const res=await axiosi.delete(`/products/${id}`)
+        const res=await axiosInstance.delete(`/products/${id}`)
         return res.data
     } catch (error) {
         throw error.response.data

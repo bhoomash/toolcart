@@ -1,11 +1,7 @@
 const Category=require("../models/Category")
+const { asyncErrorHandler, AppError } = require('../middleware/ErrorHandler');
 
-exports.getAll=async(req,res)=>{
-    try {
-        const result=await Category.find({})
-        res.status(200).json(result)
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({message:"Error fetching categories"})
-    }
-}
+exports.getAll = asyncErrorHandler(async(req,res,next) => {
+    const result = await Category.find({})
+    res.status(200).json(result)
+});

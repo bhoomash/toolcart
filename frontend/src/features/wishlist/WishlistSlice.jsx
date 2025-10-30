@@ -1,5 +1,5 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import { createWishlistItem, deleteWishlistItemById, fetchWishlistByUserId, updateWishlistItemById } from './WishlistApi'
+import { addToWishlist, deleteWishlistItemById, fetchWishlistByUserId, updateWishlistItemById } from './WishlistApi'
 
 const initialState={
     wishlistItemUpdateStatus:"idle",
@@ -13,7 +13,7 @@ const initialState={
 }
 
 export const createWishlistItemAsync=createAsyncThunk('wishlist/createWishlistItemAsync',async(data)=>{
-    const createdItem=await createWishlistItem(data)
+    const createdItem=await addToWishlist(data)
     return createdItem
 })
 export const fetchWishlistByUserIdAsync=createAsyncThunk('wishlist/fetchWishlistByUserIdAsync',async(id)=>{

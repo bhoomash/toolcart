@@ -35,31 +35,143 @@ export const CartItem = ({id,thumbnail,title,category,brand,price,quantity,stock
 
 
   return (
-    <Stack bgcolor={'white'} component={is900?'':Paper} p={is900?0:2} elevation={1}  flexDirection={'row'} justifyContent={'space-between'} alignItems={'center'}>
+    <Stack 
+        bgcolor={'white'} 
+        component={is900?'':Paper} 
+        p={is900?0:3} 
+        elevation={is900?0:1}  
+        flexDirection={'row'} 
+        justifyContent={'space-between'} 
+        alignItems={is900?'center':'flex-start'}
+        borderRadius={is900?0:2}
+        sx={{
+            border: is900 ? '1px solid #e0e0e0' : 'none',
+            '&:hover': !is900 ? {
+                boxShadow: '0 4px 12px rgba(0,0,0,0.1)',
+                transform: 'translateY(-2px)',
+                transition: 'all 0.3s ease'
+            } : {}
+        }}
+    >
         
         {/* image and details */}
-        <Stack flexDirection={'row'} rowGap={'1rem'} alignItems={'center'} columnGap={2} flexWrap={'wrap'}>
+        <Stack flexDirection={'row'} rowGap={'1rem'} alignItems={is900?'center':'flex-start'} columnGap={is900?2:4} flexWrap={'wrap'}>
 
-            <Stack width={is552?"auto":'200px'} height={is552?"auto":'200px'} component={Link} to={`/product-details/${productId}`}>
-                <img style={{width:"100%",height:is552?"auto":"100%",aspectRatio:is552?1/1:'',objectFit:'contain'}} src={thumbnail} alt={title} />
+            <Stack 
+                width={is552?"auto":is900?'120px':'180px'} 
+                height={is552?"auto":is900?'120px':'180px'} 
+                component={Link} 
+                to={`/product-details/${productId}`}
+                sx={{
+                    '&:hover img': {
+                        transform: 'scale(1.05)',
+                        transition: 'transform 0.3s ease'
+                    }
+                }}
+            >
+                <img 
+                    style={{
+                        width:"100%",
+                        height:is552?"auto":"100%",
+                        aspectRatio:is552?1/1:'',
+                        objectFit:'contain',
+                        borderRadius: '8px',
+                        transition: 'transform 0.3s ease'
+                    }} 
+                    src={thumbnail} 
+                    alt={title} 
+                />
             </Stack>
 
-            <Stack alignSelf={''}>
-                <Typography component={Link} to={`/product-details/${productId}`} sx={{textDecoration:"none",color:theme.palette.primary.main}} variant='h6' fontWeight={500}>{title}</Typography>
+            <Stack alignSelf={is900?'':'flex-start'} spacing={is900?1:2}>
+                <Typography 
+                    component={Link} 
+                    to={`/product-details/${productId}`} 
+                    sx={{
+                        textDecoration:"none",
+                        color:theme.palette.primary.main,
+                        '&:hover': {
+                            textDecoration: 'underline'
+                        }
+                    }} 
+                    variant={is900?'h6':'h5'} 
+                    fontWeight={500}
+                >
+                    {title}
+                </Typography>
                 <Typography variant='body2' color={'text.secondary'}>{brand}</Typography>
-                <Typography mt={1}>Quantity</Typography>
-                <Stack flexDirection={'row'} alignItems={'center'}>
-                    <IconButton onClick={handleRemoveQty}><RemoveIcon fontSize='small'/></IconButton>
-                    <Typography>{quantity}</Typography>
-                    <IconButton onClick={handleAddQty}><AddIcon fontSize='small'/></IconButton>
+                {!is900 && <Typography variant='body2' color={'text.secondary'}>Category: {category}</Typography>}
+                
+                <Stack spacing={1}>
+                    <Typography variant={is900?'body2':'body1'} fontWeight={500}>Quantity</Typography>
+                    <Stack flexDirection={'row'} alignItems={'center'} spacing={1}>
+                        <IconButton 
+                            onClick={handleRemoveQty}
+                            size={is900?'small':'medium'}
+                            sx={{
+                                border: '1px solid #e0e0e0',
+                                borderRadius: '8px'
+                            }}
+                        >
+                            <RemoveIcon fontSize='small'/>
+                        </IconButton>
+                        <Typography 
+                            variant={is900?'body1':'h6'} 
+                            fontWeight={500}
+                            sx={{
+                                minWidth: '30px',
+                                textAlign: 'center',
+                                px: 1
+                            }}
+                        >
+                            {quantity}
+                        </Typography>
+                        <IconButton 
+                            onClick={handleAddQty}
+                            size={is900?'small':'medium'}
+                            sx={{
+                                border: '1px solid #e0e0e0',
+                                borderRadius: '8px'
+                            }}
+                        >
+                            <AddIcon fontSize='small'/>
+                        </IconButton>
+                    </Stack>
                 </Stack>
             </Stack>
         </Stack>
 
         {/* price and remove button */}
-        <Stack justifyContent={'space-evenly'} alignSelf={is552?'flex-end':''} height={'100%'} rowGap={'1rem'} alignItems={'flex-end'}>
-            <Typography variant='body2'>₹{price}</Typography>
-            <Button size={is480?"small":""} onClick={handleProductRemove} variant='contained'>Remove</Button>
+        <Stack 
+            justifyContent={is900?'space-evenly':'space-between'} 
+            alignSelf={is552?'flex-end':'stretch'} 
+            height={is900?'100%':'auto'} 
+            rowGap={is900?'1rem':'2rem'} 
+            alignItems={'flex-end'}
+            minWidth={is900?'auto':'120px'}
+        >
+            <Typography 
+                variant={is900?'body2':'h6'} 
+                fontWeight={600}
+                color='primary.main'
+            >
+                ${price}
+            </Typography>
+            <Button 
+                size={is480?"small":is900?"medium":"large"} 
+                onClick={handleProductRemove} 
+                variant='outlined'
+                color='error'
+                sx={{
+                    borderRadius: '8px',
+                    '&:hover': {
+                        backgroundColor: 'error.main',
+                        color: 'white'
+                    }
+                }}
+            >
+                Remove
+            </Button>
         </Stack>
     </Stack>
   )

@@ -1,49 +1,38 @@
 const Address = require("../models/Address")
+const { asyncErrorHandler, AppError } = require('../middleware/ErrorHandler');
 
-exports.create=async(req,res)=>{
-    try {
-        const created=new Address(req.body)
-        await created.save()
-        res.status(201).json(created)
-    } catch (error) {
-        console.log(error);
-        return res.status(500).json({message:'Error adding address, please trying again later'})
-    }
-}
+exports.create = asyncErrorHandler(async(req,res,next) => {
+    const created = new Address(req.body)
+    await created.save()
+    res.status(201).json(created)
+});
 
-exports.getByUserId = async (req, res) => {
-    try {
-        const {id}=req.params
-        const results=await Address.find({user:id})
-        res.status(200).json(results)
+exports.getByUserId = asyncErrorHandler(async(req,res,next) => {
+    const {id} = req.params
+    const results = await Address.find({user:id})
+    res.status(200).json(results)
+});
+
+exports.updateById = asyncErrorHandler(async(req,res,next) => {
+    const {id} = req.params
+    const updated = await Address.findByIdAndUpdate(id,req.body,{new:true})
     
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({message:'Error fetching addresses, please try again later'})
+    if(!updated) {
+        throw new AppError('Address not found', 404, 'ADDRESS_NOT_FOUND');
     }
-};
+    
+    res.status(200).json(updated)
+});
 
-exports.updateById=async(req,res)=>{
-    try {
-        const {id}=req.params
-        const updated=await Address.findByIdAndUpdate(id,req.body,{new:true})
-        console.log(updated);
-        res.status(200).json(updated)
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({message:'Error updating address, please try again later'})
+exports.deleteById = asyncErrorHandler(async(req,res,next) => {
+    const {id} = req.params
+    const deleted = await Address.findByIdAndDelete(id)
+    
+    if(!deleted) {
+        throw new AppError('Address not found', 404, 'ADDRESS_NOT_FOUND');
     }
-}
-
-exports.deleteById=async(req,res)=>{
-    try {
-        const {id}=req.params
-        const deleted=await Address.findByIdAndDelete(id)
-        res.status(200).json(deleted)
-    } catch (error) {
-        console.log(error);
-        res.status(500).json({message:'Error deleting address, please try again later'})
-    }
-}
+    
+    res.status(200).json(deleted)
+});
 
 

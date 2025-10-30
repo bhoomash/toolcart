@@ -1,8 +1,8 @@
-import {axiosi} from '../../config/axios'
+import {axiosInstance} from '../../config/axios'
 
 export const createReview=async(review)=>{
     try {
-        const res=await axiosi.post('/reviews',review)
+        const res=await axiosInstance.post('/reviews',review)
         return res.data
     } catch (error) {
         throw error.response.data
@@ -10,7 +10,7 @@ export const createReview=async(review)=>{
 }
 export const fetchReviewsByProductId=async(id)=>{
     try {
-        const res=await axiosi.get(`/reviews/product/${id}`)
+        const res=await axiosInstance.get(`/reviews/product/${id}`)
         return res.data
     } catch (error) {
         throw error.response.data
@@ -19,7 +19,7 @@ export const fetchReviewsByProductId=async(id)=>{
 
 export const updateReviewById=async(update)=>{
     try {
-        const res=await axiosi.patch(`/reviews/${update._id}`,update)
+        const res=await axiosInstance.patch(`/reviews/${update._id}`,update)
         return res.data
     } catch (error) {
         throw error.response.data
@@ -27,7 +27,7 @@ export const updateReviewById=async(update)=>{
 }
 export const deleteReviewById=async(id)=>{
     try {
-        const res=await axiosi.delete(`/reviews/${id}`)
+        const res=await axiosInstance.delete(`/reviews/${id}`)
         return res.data
     } catch (error) {
         throw error.response.data

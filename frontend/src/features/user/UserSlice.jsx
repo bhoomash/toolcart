@@ -1,15 +1,15 @@
 import {createAsyncThunk, createSlice} from '@reduxjs/toolkit'
-import { fetchLoggedInUserById, updateUserById } from './UserApi'
+import { getUserById, updateUserById } from './UserApi'
 
 const initialState={
     status:"idle",
-    userInfo:null,
+    loggedInUser:null,
     errors:null,
     successMessage:null
 }
 
 export const fetchLoggedInUserByIdAsync=createAsyncThunk('user/fetchLoggedInUserByIdAsync',async(id)=>{
-    const userInfo=await fetchLoggedInUserById(id)
+    const userInfo=await getUserById(id)
     return userInfo
 })
 export const updateUserByIdAsync=createAsyncThunk('user/updateUserByIdAsync',async(update)=>{
